@@ -19,7 +19,8 @@ import com.homey.projectm.presentation.sign_in.UserData
 
 @Composable
 fun ProfileScreen(
-    userData: UserData?, onSignOut: () -> Unit
+    userData: UserData?,
+    onSignOut: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
