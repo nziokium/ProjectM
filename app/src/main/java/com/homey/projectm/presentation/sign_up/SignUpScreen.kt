@@ -1,21 +1,23 @@
-package com.homey.projectm.presentation.sign_in
+package com.homey.projectm.presentation.sign_up
 
+import android.health.connect.datatypes.units.Length
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,26 +25,17 @@ import androidx.navigation.NavController
 import com.homey.projectm.R
 import com.homey.projectm.generalButton
 import com.homey.projectm.generalOutlinedTextBox
-import com.homey.projectm.presentation.sign_up.SignUpViewModel
 import com.homey.projectm.ui.theme.buttonColor
+import kotlinx.coroutines.launch
 
 @Composable
-fun signInScreen(
+fun signUpScreen(
     navController: NavController,
-    state: SignInState,
-    onSignInClick: () -> Unit,
-    viewModel: SignInViewModel = viewModel()
-) {
+    viewModel: SignUpViewModel = viewModel(),
 
-
-    val context = LocalContext.current //Used in making Toast messages
-    LaunchedEffect(key1 = state.signInError) {
-        state.signInError?.let { error ->
-            Toast.makeText(
-                context, error, Toast.LENGTH_LONG
-            ).show()
-        }
-    }
+){
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -51,7 +44,7 @@ fun signInScreen(
     ) {
 
         Text(
-            "Sign In With",
+            "Sign Up With",
             fontSize = 24.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -59,7 +52,7 @@ fun signInScreen(
             modifier = Modifier
                 .height(52.dp)
                 .width(61.dp),
-            onClick = { onSignInClick() },
+            onClick = { /*TODO*/ },
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(width = 2.dp, color = Color.Black),
             colors = CardDefaults.cardColors(
@@ -84,10 +77,9 @@ fun signInScreen(
         )
         Spacer(modifier = Modifier.height(34.dp))
 
-
         generalOutlinedTextBox(
             text = viewModel.email,
-           onTextChange = { viewModel.email = it },
+            onTextChange = { viewModel.email = it },
             placeholderText = "Email"
         )
 
@@ -95,27 +87,48 @@ fun signInScreen(
 
         generalOutlinedTextBox(
             text = viewModel.password,
-            onTextChange = { viewModel.password = it },
+            onTextChange = { viewModel.password = it},
             placeholderText = "Password"
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
+
         generalButton(
-            text = "Log In",
+            text = "Sign Up",
             color = buttonColor,
             fontSize = 16.sp,
             onClick = {
-                viewModel.onSignInRequest()
-                navController.navigate("profile")
-                      },
+
+                // Start collecting isLoading when the button is clicked
+                coroutineScope.launch {
+                    val bool = viewModel.signUpWithEmailAndPassword()
+                    if (!bool.isSnackBarShown){
+                        navController.navigate("enter_details_screen")
+                        
+                        Toast.makeText(
+                            context,
+                            "Sign Up successful",
+                            Toast.LENGTH_LONG
+
+                        ).show()
+                    }
+                    else{
+                        Log.d("Message", "Error")
+                        Toast.makeText(
+                            context,
+                            "${viewModel.signUpWithEmailAndPassword().errorMessage}",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    }
+                }
+            },
             height = 36,
             width = 108,
             textColor = Color.White
-
-
         )
 
-    }
 
+    }
 }

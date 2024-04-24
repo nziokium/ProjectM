@@ -16,10 +16,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.homey.projectm.presentation.ProfileScreen
+import com.homey.projectm.presentation.profile.ProfileScreen
 import com.homey.projectm.presentation.sign_in.GoogleAuthUIClient
 import com.homey.projectm.presentation.sign_in.SignInViewModel
 import com.homey.projectm.presentation.sign_in.signInScreen
+import com.homey.projectm.presentation.sign_up.SignUpData
+import com.homey.projectm.presentation.sign_up.detailsScreen
+import com.homey.projectm.presentation.sign_up.signUpScreen
 import com.homey.projectm.presentation.welcomeScreen
 import kotlinx.coroutines.launch
 
@@ -59,7 +62,8 @@ fun AppNavigation(
     ) {
         composable("welcome_screen") {
             welcomeScreen(
-                onLogInClick = { navController.navigate("sign_in") }
+                onLogInClick = { navController.navigate("sign_in") },
+                onSignUpClick = { navController.navigate("sign_up") }
             )
         }
         composable("sign_in") {
@@ -68,18 +72,26 @@ fun AppNavigation(
         composable("profile") {
             val lifecycleScope = rememberCoroutineScope()
 
+
             ProfileScreen(
-                userData = googleAuthUIClient.getSignedInUser(),
                 onSignOut = {
-
-
-                    lifecycleScope.launch{
+                    lifecycleScope.launch {
                         googleAuthUIClient.signOut()
                     }
-
                     navController.popBackStack()
                 }
             )
+        }
+        composable("sign_up") {
+
+           signUpScreen(
+               navController = navController
+           )
+
+
+        }
+        composable("enter_details_screen"){
+            detailsScreen(navController = navController)
         }
     }
 }
@@ -90,8 +102,8 @@ fun SignInScreen(
     googleAuthUIClient: GoogleAuthUIClient,
     context: Context
 ) {
-    val viewModel = viewModel<SignInViewModel>()
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val signInViewModel = viewModel<SignInViewModel>()
+    val state by signInViewModel.state.collectAsStateWithLifecycle()
     val lifecycleScope = rememberCoroutineScope()
 
 
@@ -108,7 +120,7 @@ fun SignInScreen(
                     val signInResult = googleAuthUIClient.signInWithIntent(
                         intent = result.data ?: return@launch
                     )
-                    viewModel.onSignInResult(signInResult)
+                    signInViewModel.onSignInResult(signInResult)
                 }
         }
     )
@@ -122,11 +134,12 @@ fun SignInScreen(
             ).show()
 
             navController.navigate("profile")
-            viewModel.resetState()
+            signInViewModel.resetState()
         }
     }
 
     signInScreen(
+        navController = navController,
         state = state,
         onSignInClick = {
             lifecycleScope.launch {

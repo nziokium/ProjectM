@@ -15,13 +15,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.homey.projectm.ui.theme.buttonColor
 
 @Composable
 fun generalButton(
     text: String,
     color: Color,
     fontSize: TextUnit,
-    onClick: () -> Unit,
+    onClick:() -> Unit,
     border: BorderStroke? = null,
     height: Int,
     width: Int,
@@ -29,7 +30,6 @@ fun generalButton(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .clickable { onClick() }
             .height(height.dp)
             .width(width.dp),
@@ -59,23 +59,67 @@ fun generalButton(
 @Composable
 fun generalOutlinedTextBox(
     text: String,
-    onTextChange: () -> Unit,
+    onTextChange: (String) -> Unit,
     placeholderText: String
 ) {
 
         OutlinedTextField(
             value = text,
-            onValueChange = { onTextChange() },
+            onValueChange = onTextChange,
             modifier = Modifier
                 .fillMaxWidth(),
             shape = RoundedCornerShape(12.dp), // Rounded corners for the text field
             textStyle = TextStyle(
-                color = Color.Black,
-                fontSize = 16.sp
+                color = Color.Black, fontSize = 16.sp
             ),
             placeholder = { Text(placeholderText) },
             singleLine = true,
             maxLines = 1
 
         )
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun PreviewGeneralInfoTextBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        generalInfoTextBox(leftText = "Name", rightText = "Andrew Nzioki")
     }
+}
+
+@Composable
+fun generalInfoTextBox(
+    leftText: String,
+    rightText: String,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(32.dp),
+        border = BorderStroke(width = 2.dp, color = buttonColor),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(leftText)
+            Text(
+                rightText,
+                style = TextStyle(
+                    color = Color(0xFF666666)
+                )
+            )
+        }
+    }
+}

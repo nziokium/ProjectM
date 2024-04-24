@@ -20,18 +20,16 @@ import com.homey.projectm.ui.theme.buttonColor
 
 @Composable
 fun welcomeScreen(
-    onLogInClick: () -> Unit
-){
+    onLogInClick: () -> Unit,
+    onSignUpClick: () -> Unit
+) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Text(
-            "Welcome",
-            fontSize = 36.sp
+            "Welcome", fontSize = 36.sp
         )
         Spacer(modifier = Modifier.height(232.dp))
 
@@ -51,7 +49,7 @@ fun welcomeScreen(
             text = "Sign Up",
             fontSize = 24.sp,
             color = Color.White,
-            onClick = {/*TODO*/},
+            onClick = { onSignUpClick() },
             border = BorderStroke(width = 2.dp, brush = SolidColor(Color.Black)),
             height = 50,
             width = 305

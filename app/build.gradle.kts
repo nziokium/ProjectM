@@ -61,9 +61,14 @@ dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
 
+    // Firebase authorization dependency
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+
+    //Google authorization dependency
     implementation ("com.google.android.gms:play-services-auth:20.4.1")
 
+    //Cloud firestore dependency
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
