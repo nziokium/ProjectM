@@ -80,14 +80,20 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(284.dp))
         generalButton(
-            text = "Sign Out",
+            buttonItem =
+            {
+                Text(
+                    "Sign Out",
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
+            },
             color = buttonColor,
-            fontSize = 16.sp,
             onClick = { onSignOut() },
             border = null,
             height = 34,
-            width = 194,
-            textColor = Color.White
+            width = 194
+
         )
     }
 }

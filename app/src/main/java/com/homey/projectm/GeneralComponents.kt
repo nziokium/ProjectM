@@ -1,5 +1,6 @@
 package com.homey.projectm
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,17 +17,18 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.homey.projectm.ui.theme.buttonColor
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
 fun generalButton(
-    text: String,
+    buttonItem: @Composable ()-> Unit,
     color: Color,
-    fontSize: TextUnit,
     onClick:() -> Unit,
     border: BorderStroke? = null,
     height: Int,
-    width: Int,
-    textColor: Color = Color.Black
+    width: Int
 ) {
     Card(
         modifier = Modifier
@@ -46,11 +48,7 @@ fun generalButton(
             verticalAlignment = Alignment.CenterVertically
         )
         {
-            Text(
-                text,
-                fontSize = fontSize,
-                color = textColor
-            )
+            buttonItem()
         }
     }
 }
@@ -79,7 +77,6 @@ fun generalOutlinedTextBox(
         )
 }
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewGeneralInfoTextBox() {
     Box(
@@ -120,6 +117,56 @@ fun generalInfoTextBox(
                     color = Color(0xFF666666)
                 )
             )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun loading() {
+    val rotation = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        rotation.animateTo(
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            )
+        )
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(50.dp)) {
+            val radius = size.minDimension / 2
+            val strokeWidth = 4.dp.toPx()
+
+            drawArc(
+                color = Color.Gray,
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = strokeWidth)
+            )
+
+            val startAngle = 0f
+            val endAngle = rotation.value
+
+            drawArc(
+                color = Color.White,
+                startAngle = startAngle,
+                sweepAngle = endAngle,
+                useCenter = false,
+                style = Stroke(width = strokeWidth)
+            )
+
+
+
         }
     }
 }

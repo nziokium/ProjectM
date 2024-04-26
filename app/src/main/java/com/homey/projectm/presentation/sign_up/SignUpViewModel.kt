@@ -27,16 +27,18 @@ class SignUpViewModel : ViewModel() {
     var phoneNumber by mutableStateOf("")
     var idNumber by mutableStateOf("")
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    var isLoading by mutableStateOf(false)
 
     var isSnackbarShown by mutableStateOf(false)
     private val passwordAuthUiClient = PasswordAuthUiClient()
 
     suspend fun signUpWithEmailAndPassword(): SignUpCheck {
+
         return try {
+            isLoading
             // Use async to perform the asynchronous operation
             val data = passwordAuthUiClient.signUpUserWithEmailAndPassword(email, password)
+            !isLoading
             // Set isSnackbarShown based on the fetched data
             data
         } catch (e: Exception) {

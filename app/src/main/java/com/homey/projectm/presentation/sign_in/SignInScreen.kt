@@ -87,7 +87,7 @@ fun signInScreen(
 
         generalOutlinedTextBox(
             text = viewModel.email,
-           onTextChange = { viewModel.email = it },
+            onTextChange = { viewModel.email = it },
             placeholderText = "Email"
         )
 
@@ -102,18 +102,20 @@ fun signInScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         generalButton(
-            text = "Log In",
+            buttonItem = {
+                Text(
+                    "Log In",
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
+            },
             color = buttonColor,
-            fontSize = 16.sp,
             onClick = {
                 viewModel.onSignInRequest()
                 navController.navigate("profile")
-                      },
+            },
             height = 36,
-            width = 108,
-            textColor = Color.White
-
-
+            width = 108
         )
 
     }

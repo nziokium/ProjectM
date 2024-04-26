@@ -41,10 +41,18 @@ class PasswordAuthUiClient() {
 
         } catch (e: Exception) {
             Log.d("Message", "${e.message}")
-            SignUpCheck(
-                isSnackBarShown = true,
-                errorMessage = e.message
-            )
+            if (e is IllegalArgumentException){
+                SignUpCheck(
+                    isSnackBarShown = true,
+                    errorMessage = "Email/Password Field is Empty"
+                )
+            }else{
+                SignUpCheck(
+                    isSnackBarShown = true,
+                    errorMessage = e.message
+                )
+            }
+
 
 
         }

@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -67,7 +68,7 @@ fun AppNavigation(
             )
         }
         composable("sign_in") {
-            SignInScreen(navController, googleAuthUIClient, context)
+            SignInScreen(navController, googleAuthUIClient)
         }
         composable("profile") {
             val lifecycleScope = rememberCoroutineScope()
@@ -99,12 +100,12 @@ fun AppNavigation(
 @Composable
 fun SignInScreen(
     navController: NavHostController,
-    googleAuthUIClient: GoogleAuthUIClient,
-    context: Context
+    googleAuthUIClient: GoogleAuthUIClient
 ) {
     val signInViewModel = viewModel<SignInViewModel>()
     val state by signInViewModel.state.collectAsStateWithLifecycle()
     val lifecycleScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
 
     LaunchedEffect(key1 = Unit) {

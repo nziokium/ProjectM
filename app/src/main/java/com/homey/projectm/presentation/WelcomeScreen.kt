@@ -34,20 +34,30 @@ fun welcomeScreen(
         Spacer(modifier = Modifier.height(232.dp))
 
         generalButton(
-            text = "Log In",
-            fontSize = 24.sp,
+            buttonItem =
+            {
+                Text(
+                    "Log in",
+                    fontSize = 24.sp,
+                    color = Color.White
+                )
+            },
             color = buttonColor,
             onClick = { onLogInClick() },
             height = 50,
-            width = 305,
-            textColor = Color.White
+            width = 305
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         generalButton(
-            text = "Sign Up",
-            fontSize = 24.sp,
+            buttonItem = {
+                Text(
+                    "Sign Up",
+                    fontSize = 24.sp,
+                    color = Color.Black
+                )
+            },
             color = Color.White,
             onClick = { onSignUpClick() },
             border = BorderStroke(width = 2.dp, brush = SolidColor(Color.Black)),

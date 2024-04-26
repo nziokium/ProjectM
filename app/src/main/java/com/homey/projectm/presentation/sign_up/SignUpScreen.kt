@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import com.homey.projectm.R
 import com.homey.projectm.generalButton
 import com.homey.projectm.generalOutlinedTextBox
+import com.homey.projectm.loading
 import com.homey.projectm.ui.theme.buttonColor
 import kotlinx.coroutines.launch
 
@@ -95,9 +96,20 @@ fun signUpScreen(
 
 
         generalButton(
-            text = "Sign Up",
+            buttonItem =
+            {
+            if (!viewModel.isLoading){
+                Text(
+                    "Sign Up",
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
+            }
+            else{
+                loading()
+            }
+            },
             color = buttonColor,
-            fontSize = 16.sp,
             onClick = {
 
                 // Start collecting isLoading when the button is clicked
@@ -125,8 +137,7 @@ fun signUpScreen(
                 }
             },
             height = 36,
-            width = 108,
-            textColor = Color.White
+            width = 108
         )
 
 

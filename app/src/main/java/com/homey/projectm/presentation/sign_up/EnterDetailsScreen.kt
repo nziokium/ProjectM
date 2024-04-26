@@ -20,25 +20,27 @@ import com.homey.projectm.ui.theme.buttonColor
 fun detailsScreen(
     navController: NavController,
     viewModel: SignUpViewModel = viewModel()
-){
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp),
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
 
 
         Text(
             "Welcome! Let us get you set up.",
-            fontSize = 24.sp,)
+            fontSize = 24.sp,
+        )
 
 
         Spacer(modifier = Modifier.height(72.dp))
 
         generalOutlinedTextBox(
             text = viewModel.userName,
-            onTextChange = { viewModel.userName= it },
+            onTextChange = { viewModel.userName = it },
             placeholderText = "Full Name"
 
         )
@@ -56,22 +58,29 @@ fun detailsScreen(
 
         generalOutlinedTextBox(
             text = viewModel.idNumber,
-            onTextChange = {viewModel.idNumber = it},
+            onTextChange = { viewModel.idNumber = it },
             placeholderText = "ID Number"
         )
         Spacer(modifier = Modifier.height(63.dp))
 
 
         generalButton(
-            text = "Finish",
+            buttonItem =
+            {
+                Text(
+                    "Finish",
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
+            },
             color = buttonColor,
-            fontSize = 16.sp,
+
             onClick = {
                 viewModel.updateUserDetails()
-                     navController.navigate("profile") },
+                navController.navigate("profile")
+            },
             height = 34,
-            width = 194,
-            textColor = Color.White
+            width = 194
         )
     }
 }
