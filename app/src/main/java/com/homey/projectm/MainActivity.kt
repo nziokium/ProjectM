@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val context = LocalContext.current
 
-                    AppNavigation(navController, googleAuthUIClient, context)
+
                 }
             }
         }

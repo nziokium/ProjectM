@@ -1,4 +1,4 @@
-package com.homey.projectm.presentation.sign_in
+package com.homey.projectm.features.onboarding.presentation.sign_in
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.homey.projectm.features.onboarding.domain.model.SignInResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

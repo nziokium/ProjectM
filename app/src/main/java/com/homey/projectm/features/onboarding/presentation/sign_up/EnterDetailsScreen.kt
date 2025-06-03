@@ -1,4 +1,4 @@
-package com.homey.projectm.presentation.sign_up
+package com.homey.projectm.features.onboarding.presentation.sign_up
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text

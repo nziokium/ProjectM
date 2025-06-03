@@ -1,11 +1,5 @@
-package com.homey.projectm.presentation.sign_up
+package com.homey.projectm.features.onboarding.domain.model
 
-import androidx.compose.runtime.MutableState
-
-data class SignUpResult(
-    val data: SignUpData? = null,
-    val errorMessage: String? = null
-)
 data class SignUpData(
     var email: String? = null,
     var password: String? = null,
@@ -14,4 +8,3 @@ data class SignUpData(
     var phoneNumber: String? = null,
     var nationalId: String? = null
 )
-

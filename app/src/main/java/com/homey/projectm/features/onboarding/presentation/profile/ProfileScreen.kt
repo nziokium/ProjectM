@@ -1,4 +1,4 @@
-package com.homey.projectm.presentation.profile
+package com.homey.projectm.features.onboarding.presentation.profile
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape

@@ -17,14 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.homey.projectm.presentation.profile.ProfileScreen
-import com.homey.projectm.presentation.sign_in.GoogleAuthUIClient
-import com.homey.projectm.presentation.sign_in.SignInViewModel
-import com.homey.projectm.presentation.sign_in.signInScreen
-import com.homey.projectm.presentation.sign_up.SignUpData
-import com.homey.projectm.presentation.sign_up.detailsScreen
-import com.homey.projectm.presentation.sign_up.signUpScreen
-import com.homey.projectm.presentation.welcomeScreen
+import com.homey.projectm.features.onboarding.presentation.profile.ProfileScreen
+import com.homey.projectm.features.onboarding.presentation.sign_up.signUpScreen
 import kotlinx.coroutines.launch
 
 @Composable

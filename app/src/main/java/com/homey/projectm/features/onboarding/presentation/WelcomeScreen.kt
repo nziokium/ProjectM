@@ -1,4 +1,4 @@
-package com.homey.projectm.presentation
+package com.homey.projectm.features.onboarding.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

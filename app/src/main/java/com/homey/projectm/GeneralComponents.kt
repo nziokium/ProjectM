@@ -23,32 +23,31 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
 fun generalButton(
-    buttonItem: @Composable ()-> Unit,
+    buttonItem: @Composable () -> Unit,
+    isLoading: Boolean = false,
+    onClick: () -> Unit,
     color: Color,
-    onClick:() -> Unit,
     border: BorderStroke? = null,
     height: Int,
     width: Int
 ) {
     Card(
         modifier = Modifier
-            .clickable { onClick() }
+            .clickable { if (!isLoading) onClick() }
             .height(height.dp)
             .width(width.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = color
-        ),
+        colors = CardDefaults.cardColors(containerColor = color),
         border = border
-
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        )
-        {
-            buttonItem()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isLoading) {
+                loading() // Display loading indicator
+            } else {
+                buttonItem() // Display the button item
+            }
         }
     }
 }
@@ -142,7 +141,7 @@ fun loading() {
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier = Modifier.size(50.dp)) {
+        Canvas(modifier = Modifier.size(8.dp)) {
             val radius = size.minDimension / 2
             val strokeWidth = 4.dp.toPx()
 

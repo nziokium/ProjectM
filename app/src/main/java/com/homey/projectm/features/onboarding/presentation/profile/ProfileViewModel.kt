@@ -1,13 +1,12 @@
-package com.homey.projectm.presentation.profile
+package com.homey.projectm.features.onboarding.presentation.profile
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.homey.projectm.presentation.sign_up.SignUpData
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.homey.projectm.features.onboarding.domain.model.SignUpData
 
 
 class ProfileViewModel : ViewModel() {
