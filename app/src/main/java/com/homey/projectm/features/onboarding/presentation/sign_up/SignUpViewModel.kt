@@ -1,23 +1,31 @@
 package com.homey.projectm.features.onboarding.presentation.sign_up
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.compose.runtime.State
+import com.homey.projectm.core.util.Resource
 import com.homey.projectm.features.onboarding.domain.model.SignUpCheck
-import kotlinx.coroutines.delay
+import com.homey.projectm.features.onboarding.domain.model.UIEvent
+import com.homey.projectm.features.onboarding.domain.useCases.OnboardingUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.math.sign
 
-import kotlin.coroutines.cancellation.CancellationException
-
-class SignUpViewModel : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val useCases: OnboardingUseCases
+) : ViewModel() {
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -29,17 +37,15 @@ class SignUpViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val passwordAuthUiClient = PasswordAuthUiClient()
+    private val _uiEventChannel = Channel<UIEvent>()
+    val uiEvent = _uiEventChannel.receiveAsFlow()
 
     fun signUpWithEmailAndPassword(): SignUpCheck {
         viewModelScope.launch {
-            return@launch try {
+            try {
                 _isLoading.value = true
-                // Perform your asynchronous operation here
-                val data = passwordAuthUiClient.signUpUserWithEmailAndPassword(email, password)
-
+                val data = useCases.signUpWithEmailAndPassword.execute(email,password)
                 data
-
             } catch (e: Exception) {
                 // Handle exceptions
                 e.printStackTrace()
@@ -48,16 +54,35 @@ class SignUpViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
+        return SignUpCheck()
     }
 
 
     fun updateUserDetails() {
         try {
             viewModelScope.launch {
-                passwordAuthUiClient.updateUserDetails(phoneNumber, idNumber, userName)
+                useCases.updateUserDetails.execute(phoneNumber, idNumber, userName)
             }
         } catch (e: Exception) {
             Log.d("Error", "Update failed.")
+        }
+    }
+
+    fun signUpWithGoogle(context: Context){
+        viewModelScope.launch(Dispatchers.IO) {
+            useCases.signInWithGoogle.execute(context).collect { signInResult ->
+                when(signInResult){
+                    is Resource.Error -> {
+                        _uiEventChannel.send(UIEvent.ShowSnackBar("Error: ${signInResult.message}"))
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Success -> {
+
+                    }
+                }
+            }
         }
     }
 }

@@ -1,13 +1,14 @@
 package com.homey.projectm.features.onboarding.domain.useCases
 
 import com.homey.projectm.core.util.Resource
+import com.homey.projectm.features.onboarding.domain.model.SignUpData
 import com.homey.projectm.features.onboarding.domain.repostiory.OnboardingRepository
 import javax.inject.Inject
 
-class SignInWithEmailAndPassword @Inject constructor(
+class GetUserData @Inject constructor(
     private val repository: OnboardingRepository
 ) {
-    suspend fun execute(email: String, password: String): Resource<Unit> {
-        return repository.signIn(email, password)
+    suspend fun execute(): Resource<SignUpData> {
+        return repository.getUserData()
     }
 }

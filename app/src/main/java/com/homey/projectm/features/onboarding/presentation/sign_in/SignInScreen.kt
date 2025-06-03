@@ -21,26 +21,40 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.homey.projectm.R
+import com.homey.projectm.features.onboarding.domain.model.UIEvent
 import com.homey.projectm.generalButton
 import com.homey.projectm.generalOutlinedTextBox
-import com.homey.projectm.presentation.sign_up.SignUpViewModel
 import com.homey.projectm.ui.theme.buttonColor
 
 @Composable
 fun signInScreen(
     navController: NavController,
-    state: SignInState,
-    onSignInClick: () -> Unit,
     viewModel: SignInViewModel = viewModel()
 ) {
 
 
     val context = LocalContext.current //Used in making Toast messages
-    LaunchedEffect(key1 = state.signInError) {
-        state.signInError?.let { error ->
-            Toast.makeText(
-                context, error, Toast.LENGTH_LONG
-            ).show()
+
+
+    LaunchedEffect(key1 = context){
+        viewModel.uiEvent.collect { event ->
+            when(event){
+                UIEvent.ChangeScreens -> {
+                    Toast.makeText(
+                        context,
+                        "Sign In successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    navController.navigate("enter_details_screen")
+                }
+                is UIEvent.ShowSnackBar -> {
+                    Toast.makeText(
+                        context,
+                        event.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
     }
 
@@ -59,7 +73,7 @@ fun signInScreen(
             modifier = Modifier
                 .height(52.dp)
                 .width(61.dp),
-            onClick = { onSignInClick() },
+            onClick = { viewModel.signInWithGoogle(context) },
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(width = 2.dp, color = Color.Black),
             colors = CardDefaults.cardColors(

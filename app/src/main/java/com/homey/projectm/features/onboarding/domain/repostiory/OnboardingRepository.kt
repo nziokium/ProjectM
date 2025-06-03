@@ -11,4 +11,8 @@ interface OnboardingRepository {
     suspend fun signUp(email: String, password: String): SignUpCheck
 
     suspend fun signOut()
+
+    suspend fun updateUserDetails(phoneNumber: String, nationalId: String, name: String): Resource<Unit>
+
+    suspend fun getUserData(): Resource<SignUpData>
 }

@@ -18,14 +18,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.homey.projectm.features.onboarding.presentation.profile.ProfileScreen
+import com.homey.projectm.features.onboarding.presentation.sign_in.signInScreen
+import com.homey.projectm.features.onboarding.presentation.sign_up.detailsScreen
 import com.homey.projectm.features.onboarding.presentation.sign_up.signUpScreen
+import com.homey.projectm.features.onboarding.presentation.welcomeScreen
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController,
-    googleAuthUIClient: GoogleAuthUIClient,
-    context: Context
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
@@ -62,89 +63,21 @@ fun AppNavigation(
             )
         }
         composable("sign_in") {
-            SignInScreen(navController, googleAuthUIClient)
+            signInScreen(navController)
         }
         composable("profile") {
             val lifecycleScope = rememberCoroutineScope()
 
 
-            ProfileScreen(
-                onSignOut = {
-                    lifecycleScope.launch {
-                        googleAuthUIClient.signOut()
-                    }
-                    navController.popBackStack()
-                }
-            )
+            ProfileScreen(navController)
         }
         composable("sign_up") {
-
-           signUpScreen(
-               navController = navController
-           )
-
-
+            signUpScreen(
+                navController
+            )
         }
         composable("enter_details_screen"){
             detailsScreen(navController = navController)
         }
     }
-}
-
-@Composable
-fun SignInScreen(
-    navController: NavHostController,
-    googleAuthUIClient: GoogleAuthUIClient
-) {
-    val signInViewModel = viewModel<SignInViewModel>()
-    val state by signInViewModel.state.collectAsStateWithLifecycle()
-    val lifecycleScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-
-    LaunchedEffect(key1 = Unit) {
-        if (googleAuthUIClient.getSignedInUser() != null) {
-            navController.navigate("profile")
-        }
-    }
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = { result ->
-            if (result.resultCode == RESULT_OK)
-                lifecycleScope.launch {
-                    val signInResult = googleAuthUIClient.signInWithIntent(
-                        intent = result.data ?: return@launch
-                    )
-                    signInViewModel.onSignInResult(signInResult)
-                }
-        }
-    )
-
-    LaunchedEffect(key1 = state.isSignInSuccessful) {
-        if (state.isSignInSuccessful) {
-            Toast.makeText(
-                context,
-                "Sign In successful",
-                Toast.LENGTH_LONG
-            ).show()
-
-            navController.navigate("profile")
-            signInViewModel.resetState()
-        }
-    }
-
-    signInScreen(
-        navController = navController,
-        state = state,
-        onSignInClick = {
-            lifecycleScope.launch {
-                val signInIntentSender = googleAuthUIClient.signIn()
-                launcher.launch(
-                    IntentSenderRequest.Builder(
-                        signInIntentSender ?: return@launch
-                    ).build()
-                )
-            }
-        }
-    )
 }

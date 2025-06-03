@@ -84,7 +84,11 @@ class OnboardingRepositoryImpl(
 
 
 
-    suspend fun updateUserDetails(phoneNumber: String, nationalId: String, name: String) {
+    override suspend fun updateUserDetails(
+        phoneNumber: String,
+        nationalId: String,
+        name: String
+    ): Resource<Unit> {
         val newData = auth.currentUser?.run {
             SignUpData(
                 email = email,
@@ -103,20 +107,24 @@ class OnboardingRepositoryImpl(
         )
 
         newData?.uid?.let {
-            try {
+            return try {
                 firestore.collection("Users")
                     .document(it)
                     .update(updates as Map<String, Any>)
                     .await()
-                // Update successful
+                Resource.Success(Unit)
             } catch (e: Exception) {
-                // Handle any errors
                 Log.e("TAG", "Error updating user details", e)
+                Resource.Error("Error updating user details: ${e.message}")
             }
         }
+
+        //If no user signed in, return error message
+        return Resource.Error("User not signed in")
     }
 
-    suspend fun getUserData(): Resource<SignUpData> {
+
+    override suspend fun getUserData(): Resource<SignUpData> {
         return try {
             val document = firestore
                 .collection("Users")

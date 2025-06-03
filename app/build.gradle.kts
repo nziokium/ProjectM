@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -38,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -69,6 +71,13 @@ dependencies {
 
     //Cloud firestore dependency
     implementation("com.google.firebase:firebase-firestore")
+
+    // Hilt core
+    implementation("com.google.dagger:hilt-android:2.51")
+    kapt("com.google.dagger:hilt-android-compiler:2.51")
+
+    // Compose Navigation with Hilt (optional, for Compose projects)
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //Google Sign In implementations
     implementation("androidx.credentials:credentials:1.3.0")

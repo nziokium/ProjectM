@@ -9,17 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import com.homey.projectm.presentation.sign_in.*
 import com.homey.projectm.ui.theme.ProjectMTheme
 
 class MainActivity : ComponentActivity() {
-
-    private val googleAuthUIClient by lazy {
-        GoogleAuthUIClient(
-            context = applicationContext,
-            oneTapClient = com.google.android.gms.auth.api.identity.Identity.getSignInClient(applicationContext)
-        )
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +21,8 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
-                    val context = LocalContext.current
 
+                    AppNavigation(navController)
 
                 }
             }
